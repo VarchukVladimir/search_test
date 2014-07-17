@@ -93,6 +93,8 @@ int main ( int argc, char ** argv )
 	{
 		if ( entry->d_type == DT_REG )
 		{
+			if ( strncasecmp (entry->d_name + strlen ( entry->d_name ) - 4, ".txt", 3) != 0 )
+				continue;
 			char *fpath = NULL;
 			char *buff = NULL;
 			FILE *f = NULL;
