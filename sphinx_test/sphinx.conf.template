@@ -17,6 +17,14 @@ source testindex
 	xmlpipe_command = {ABS_PATH}/create_xml --stdout {INDEX_PATH}
 }
 
+source testindex_delta
+{
+	type = xmlpipe2
+	#xmlpipe_command = cat /home/volodymyr/sphinx/index.xml
+	xmlpipe_command = {ABS_PATH}/create_xml --stdout {INDEX_PATH}
+}
+
+
 #############################################################################
 ## index definition
 #############################################################################
@@ -32,6 +40,20 @@ index testindex
 {
 	source			= testindex
 	path			= {ABS_PATH}/index/testindex
+#	docinfo			= extern
+#	mlock			= 0
+	morphology		= stem_enru
+	charset_type		= utf-8
+#	charset_table		= 0..9, A..Z->a..z, _, a..z, U+A8->U+B8, U+B8, U+C0..U+DF->U+E0..U+FF, U+E0..U+FF
+	enable_star		= 1
+#	html_strip		= 1
+	min_word_len		= 1
+}
+
+index testindex_delta
+{
+	source			= testindex_delta
+	path			= {ABS_PATH}/index/testindex_delta
 #	docinfo			= extern
 #	mlock			= 0
 	morphology		= stem_enru
