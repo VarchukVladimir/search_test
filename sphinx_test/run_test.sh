@@ -16,4 +16,6 @@ if ! [ -f index ]; then
 	mkdir -p index
 fi
 
-time indexer -c $CONF_FILE testindex
+{ time indexer -c $CONF_FILE testindex ; } 2>> time.txt
+
+#time search -c $CONF_FILE -i testindex "test" text
