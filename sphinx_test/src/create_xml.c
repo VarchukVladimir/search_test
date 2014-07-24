@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <ctype.h>
+#include <zlib.h>
 
 #undef TEST
 
@@ -40,15 +41,20 @@ void close_xml ( int fxml )
 void open_xml_doc ( int fxml, long doc_id, char *fname )
 {
 	char *str_ =
-			"<sphinx:document id=\"%ld\">\n\
+			"<sphinx:document id=\"%zu\">\n\
 <file_name_attr><![CDATA[%s]]></file_name_attr>\n\
 <file_name><![CDATA[%s]]></file_name>\n\
 <content><![CDATA[";
 	char *buff = NULL;
 	int buffsize = 0;
+	unsigned long crc = crc32(0L, Z_NULL, 0);
+
+	crc = crc32(0L, Z_NULL, 0);
+	crc = crc32(crc, (const Bytef*) fname, strlen (fname));
+
 	buffsize = strlen( str_ ) + strlen( fname ) * 20;
 	buff = malloc( buffsize );
-	snprintf( buff, buffsize, str_, doc_id, fname, fname );
+	snprintf( buff, buffsize, str_, crc, fname, fname );
 	write( fxml, buff, strlen( buff ) );
 #ifdef TEST
 	fwrite( buff, 1, strlen( buff ), stderr );
@@ -118,6 +124,7 @@ int main ( int argc, char ** argv )
 			buff = malloc( finfo.st_size );
 			open_xml_doc( fxml, doc_id++, fpath );
 			fread( buff, 1, finfo.st_size, f );
+/*
 			int i = 0;
 			for( i = 0; i < finfo.st_size - 1; i++ )
 			{
@@ -125,6 +132,7 @@ int main ( int argc, char ** argv )
 				if ( !isalnum( buff[i] ) && buff[i] != '\n' )
 					buff[i] = ' ';
 			}
+*/
 			write( fxml, buff, finfo.st_size - 1 );
 			close_xml_doc( fxml );
 			fclose( f );
