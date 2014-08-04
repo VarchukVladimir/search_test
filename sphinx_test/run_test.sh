@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CUR_DIR=`pwd`
-if [ $# -ne 1 ] 
+if [ $# -lt 1 ] 
 then
     echo "Usage: `basename $0` index path"
     exit $WRONG_ARGS
@@ -16,6 +16,8 @@ if ! [ -f index ]; then
 	mkdir -p index
 fi
 
-{ time indexer -c $CONF_FILE testindex ; } 2>> time.txt
+rm "$2"_time.txt
+
+{ time indexer -c $CONF_FILE testindex ; } 2>> "$2"_time.txt
 
 #time search -c $CONF_FILE -i testindex "test" text
