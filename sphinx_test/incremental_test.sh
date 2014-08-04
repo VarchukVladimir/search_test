@@ -17,11 +17,11 @@ for file in $1/*; do
 		let DIR_COUNTER=DIR_COUNTER+1
 		if [ $DIR_COUNTER -eq 1 ] 
 		then
-			./run_test.sh "$2"
+			./run_test.sh "$2" "$3"
 		fi 
 #		echo "$file  $FILE_COUNTER ----- $DIR_COUNTEER"
 
-		./run_test_merge.sh "$2"
+		./run_test_merge.sh "$2" "$3"
 		rm -fr "$2"/*
 	fi	
 	
